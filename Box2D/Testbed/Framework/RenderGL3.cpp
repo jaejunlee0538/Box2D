@@ -25,7 +25,7 @@
 #ifdef __APPLE__
 #include <OpenGL/gl3.h>
 #else
-#include <glew/glew.h>
+#include <GL/glew.h>
 #include <GL/gl.h>
 #endif
 
@@ -479,7 +479,11 @@ bool RenderGLInit(const char* fontpath)
 
 	// Load font.
 	FILE* fp = fopen(fontpath, "rb");
-	if (!fp) return false;
+
+	if (!fp) {
+		printf("File open error(%s)\n", fontpath);
+		return false;
+	}
 	fseek(fp, 0, SEEK_END);
 	int size = (int)ftell(fp);
 	fseek(fp, 0, SEEK_SET);
@@ -487,6 +491,7 @@ bool RenderGLInit(const char* fontpath)
 	unsigned char* ttfBuffer = (unsigned char*)malloc(size);
 	if (!ttfBuffer)
 	{
+		printf("Array allocation failed\n");
 		fclose(fp);
 		return false;
 	}
@@ -498,6 +503,7 @@ bool RenderGLInit(const char* fontpath)
 	unsigned char* bmap = (unsigned char*)malloc(512 * 512);
 	if (!bmap)
 	{
+		printf("Bitmap array allocation failed\n");
 		free(ttfBuffer);
 		return false;
 	}

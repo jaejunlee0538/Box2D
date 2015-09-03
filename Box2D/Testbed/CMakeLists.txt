@@ -1,6 +1,11 @@
 # Some flags for Freeglut and GLUI.
 add_definitions( -DGLEW_STATIC -D_CRT_SECURE_NO_WARNINGS )
 
+find_package(GLEW REQUIRED)
+
+find_package(PkgConfig REQUIRED)
+pkg_search_module(GLFW REQUIRED glfw3)
+
 # Define the framework files.
 set(Testbed_Framework_SRCS
 	Framework/DebugDraw.cpp
@@ -68,9 +73,12 @@ source_group(Framework FILES ${Testbed_Framework_SRCS})
 source_group(Tests FILES ${Testbed_Tests_SRCS})
 
 include_directories (
+	${GLEW_INCLUDE_DIRS}
+	${GLFW_INCLUDE_DIRS}
 	${OPENGL_INCLUDE_DIR}
 	${Box2D_SOURCE_DIR}
 )
+
 
 if(APPLE)
 	# We are not using the Apple's framework version, but X11's
@@ -89,11 +97,16 @@ add_executable(Testbed
 target_link_libraries (
 	Testbed
 	Box2D
-	glew
-	glfw
 	${ADDITIONAL_LIBRARIES}
+	${GLEW_LIBRARIES}
+	${GLFW_LIBRARIES}
 	${OPENGL_LIBRARIES}
-) 
+	X11 Xrandr Xi Xxf86vm Xcursor Xinerama
+	pthread
+)
+# install glew, glfw3 seperately and exclude embeded glew, glfw from build.
+# http://stackoverflow.com/questions/21685903/glfw3-undefined-reference-to-xrr
+# I am under Ubuntu 14.04 and had to add theses libraries: X11 Xrandr Xi Xxf86vm Xcursor Xinerama
 
 file(COPY ../Build/Data DESTINATION ..)
 

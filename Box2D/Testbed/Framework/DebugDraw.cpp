@@ -21,10 +21,10 @@
 #if defined(__APPLE_CC__)
 #include <OpenGL/gl3.h>
 #else
-#include <glew/glew.h>
+#include <GL/glew.h>
 #endif
 
-#include <glfw/glfw3.h>
+#include <GLFW/glfw3.h>
 #include <stdio.h>
 #include <stdarg.h>
 

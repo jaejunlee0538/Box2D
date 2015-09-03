@@ -48,5 +48,6 @@
 // TODO get defines for other platforms
 
 #define _GLFW_USE_OPENGL
+
 #define _GLFW_VERSION_FULL "3.0.3"
 
